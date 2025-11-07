@@ -26,5 +26,28 @@ router.route('/:id').delete((req, res) => {
     .then(() => res.json('Cliente excluído.'))
     .catch(err => res.status(400).json('Error: ' + err));
 });
+// backend/routes/clientes.js
 
+// ... (rotas anteriores: GET /, POST /add, DELETE /:id) ...
+
+// GET por ID (Para carregar os dados no formulário de edição)
+router.route('/:id').get((req, res) => {
+    Cliente.findById(req.params.id)
+        .then(cliente => res.json(cliente))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
+// UPDATE (Para salvar as alterações)
+router.route('/update/:id').post((req, res) => {
+    Cliente.findById(req.params.id)
+        .then(cliente => {
+            cliente.nome = req.body.nome;
+            cliente.telefone = req.body.telefone;
+            
+            cliente.save()
+                .then(() => res.json('Cliente atualizado!'))
+                .catch(err => res.status(400).json('Error: ' + err));
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+});
 module.exports = router;
