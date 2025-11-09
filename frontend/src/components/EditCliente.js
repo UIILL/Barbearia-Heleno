@@ -13,7 +13,7 @@ function EditCliente() {
     const [mensagem, setMensagem] = useState('');
 
     useEffect(() => {
-        axios.get('http://localhost:5000/clientes/' + id)
+        axios.get('https://barbearia-heleno.onrender.com' + id)
             .then(response => {
                 
                 setNome(response.data.nome);
@@ -36,7 +36,7 @@ function EditCliente() {
         setMensagem('');
 
         
-        axios.post('http://localhost:5000/clientes/update/' + id, cliente)
+        axios.post('https://barbearia-heleno.onrender.com' + id, cliente)
             .then(res => {
                 setMensagem('✅ Cliente Atualizado com Sucesso!');
                 

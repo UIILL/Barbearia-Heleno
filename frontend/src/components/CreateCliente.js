@@ -17,7 +17,7 @@ function CreateCliente() {
         
         setMensagem(''); 
 
-        axios.post('http://localhost:5000/clientes/add', cliente)
+        axios.post('https://barbearia-heleno.onrender.com', cliente)
             .then(res => {
                
                 setMensagem('✅ Cliente Adicionado com Sucesso!'); 

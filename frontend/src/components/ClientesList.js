@@ -6,7 +6,7 @@ function ClientesList() {
     const [clientes, setClientes] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/clientes/')
+        axios.get('https://barbearia-heleno.onrender.com')
             .then(response => {
                 setClientes(response.data);
             })
@@ -16,7 +16,7 @@ function ClientesList() {
     }, []);
 
     const deleteCliente = (id) => {
-        axios.delete('http://localhost:5000/clientes/' + id)
+        axios.delete('https://barbearia-heleno.onrender.com' + id)
             .then(response => { console.log(response.data)});
 
         setClientes(clientes.filter(el => el._id !== id));
@@ -47,11 +47,11 @@ function ClientesList() {
 
     return (
         <div style={{ marginTop: 20 }}>
-            <h3>Lista de Clientes ({clientes.length} Cadastrados)</h3> {/* 🆕 Contagem de clientes */}
+            <h3>Lista de Clientes ({clientes.length} Cadastrados)</h3> {}
             <table className="table table-striped table-hover mt-3">
                 <thead className="thead-dark">
                     <tr>
-                        {/* 🎯 NOVO: Cabeçalho da Numeração */}
+                        {}
                         <th className="text-center">#</th> 
                         <th className="text-center">Nome</th>
                         <th className="text-start">Telefone</th>

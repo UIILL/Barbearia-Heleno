@@ -8,13 +8,14 @@ function Navbar() {
       <Link to="/" className="navbar-brand">💈 BARBEARIA DO HELENO</Link>
       <div className="collpase navbar-collapse">
         <ul className="navbar-nav mr-auto">
-          <li className="navbar-item">
-            <Link to="/list" className="nav-link">CLIENTES</Link>
-          </li>
+         
           <li className="navbar-item">
             <Link to="/create" className="nav-link">CADASTRO</Link>
           </li>
-        </ul>
+          <li className="navbar-item">
+            <Link to="/list" className="nav-link">CLIENTES</Link>
+          </li>
+          </ul>
       </div>
     </nav>
   );
