@@ -35,7 +35,7 @@ function ClientesList() {
                 <Link to={"/edit/"+props.cliente._id} className="btn btn-sm btn-info me-2">Editar</Link>
                 
                 {}
-                <a href="#" className="btn btn-sm btn-danger" onClick={() => { deleteCliente(props.cliente._id) }}>Excluir</a>
+                <button className="btn btn-sm btn-danger" onClick={() => { deleteCliente(props.cliente._id) }}>Excluir</button>
             </td>
         </tr>
     );
