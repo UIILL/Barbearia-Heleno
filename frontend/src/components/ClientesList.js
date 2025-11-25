@@ -37,11 +37,60 @@ function ClientesList() {
     const Cliente = props => (
         <tr>
             <td className="text-center">{props.index + 1}</td>
-            <td>{props.cliente.nome}</td> {/* Alinhei à esquerda para nome */}
+            <td>{props.cliente.nome}</td>
             <td>{props.cliente.telefone}</td>
-            <td>{new Date(props.cliente.dataCadastro).toLocaleDateString('pt-BR')}</td> {/* Formato BR */}
+            <td>{new Date(props.cliente.dataCadastro).toLocaleDateString('pt-BR')}</td>
+            
+            {/* 🚨 CORREÇÃO: A tag <td> foi aberta aqui */}
             <td className="text-center">
-                {/* 🚨 NOVIDADE: Botão Editar com estilo btn-outline-dark para harmonia */}
+                
+                {/* Botões */}
                 <Link to={"/edit/"+props.cliente._id} className="btn btn-outline-dark btn-sm me-2">Editar</Link>
-                {/* Botão Excluir com btn-danger para ação de risco */}
                 <button className="btn btn-danger btn-sm" onClick={() => { deleteCliente(props.cliente._id) }}>Excluir</button>
+            
+            </td> {/* 🚨 CORREÇÃO: Fechamento da tag </td> */}
+        </tr> // 🚨 CORREÇÃO: Fechamento da tag </tr>
+    );
+
+    const clientesList = () => {
+        return clientes.map((c, index) => <Cliente cliente={c} key={c._id} index={index} />);
+    };
+
+    return (
+        <div className="container mt-4">
+            <div className="card shadow-sm p-4">
+                <h4 className="text-secondary mb-4">
+                    Lista de Clientes ({clientes.length} Cadastrados)
+                </h4>
+
+                {/* Mensagem de feedback (listagem ou exclusão) */}
+                {mensagem && (
+                    <div className={`alert ${mensagem.startsWith('✅') ? 'alert-success' : 'alert-danger'} mt-3`} role="alert">
+                        {mensagem}
+                    </div>
+                )}
+                
+                {clientes.length > 0 ? (
+                    <table className="table table-striped table-hover mt-3">
+                        <thead className="thead-light">
+                            <tr>
+                                <th className="text-muted fw-normal text-center">#</th>
+                                <th className="text-muted fw-normal">Nome</th>
+                                <th className="text-muted fw-normal">Telefone</th>
+                                <th className="text-muted fw-normal">Cadastro</th>
+                                <th className="text-muted fw-normal text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            { clientesList() }
+                        </tbody>
+                    </table>
+                ) : (
+                    <p className="text-muted text-center mt-4">Nenhum cliente cadastrado ainda. <Link to="/create">Cadastre um novo cliente.</Link></p>
+                )}
+            </div>
+        </div>
+    );
+}
+
+export default ClientesList;
