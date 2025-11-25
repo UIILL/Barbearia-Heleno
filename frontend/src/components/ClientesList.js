@@ -6,7 +6,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 function ClientesList() {
     const [clientes, setClientes] = useState([]);
-    const [mensagem, setMensagem] = useState(''); // Para feedback na exclusão
+    const [mensagem, setMensagem] = useState(''); 
 
     useEffect(() => {
         axios.get(API_URL + '/clientes')
@@ -25,12 +25,12 @@ function ClientesList() {
                 console.log("Cliente excluído:", response.data);
                 setClientes(clientes.filter(el => el._id !== id));
                 setMensagem('✅ Cliente excluído com sucesso!');
-                setTimeout(() => setMensagem(''), 3000); // Limpa a mensagem após 3 segundos
+                setTimeout(() => setMensagem(''), 3000); 
             })
             .catch((error) => {
                 console.error("Erro ao excluir cliente:", error);
                 setMensagem('❌ Erro ao excluir cliente.');
-                setTimeout(() => setMensagem(''), 3000); // Limpa a mensagem após 3 segundos
+                setTimeout(() => setMensagem(''), 3000); 
             });
     };
 
@@ -41,7 +41,7 @@ function ClientesList() {
             <td>{props.cliente.telefone}</td>
             <td>{new Date(props.cliente.dataCadastro).toLocaleDateString('pt-BR')}</td>
             
-            {/* 🚨 CORREÇÃO: A tag <td> foi aberta aqui */}
+            
             <td className="text-center">
                 
                 {/* Botões */}
@@ -63,7 +63,7 @@ function ClientesList() {
                     Lista de Clientes ({clientes.length} Cadastrados)
                 </h4>
 
-                {/* Mensagem de feedback (listagem ou exclusão) */}
+                
                 {mensagem && (
                     <div className={`alert ${mensagem.startsWith('✅') ? 'alert-success' : 'alert-danger'} mt-3`} role="alert">
                         {mensagem}
