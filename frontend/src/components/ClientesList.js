@@ -6,7 +6,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 function ClientesList() {
     const [clientes, setClientes] = useState([]);
-    const [mensagem, setMensagem] = useState(''); 
+    const [mensagem, setMensagem] = useState(''); // Para feedback na exclusão
 
     useEffect(() => {
         axios.get(API_URL + '/clientes')
@@ -25,12 +25,12 @@ function ClientesList() {
                 console.log("Cliente excluído:", response.data);
                 setClientes(clientes.filter(el => el._id !== id));
                 setMensagem('✅ Cliente excluído com sucesso!');
-                setTimeout(() => setMensagem(''), 3000); 
+                setTimeout(() => setMensagem(''), 3000); // Limpa a mensagem após 3 segundos
             })
             .catch((error) => {
                 console.error("Erro ao excluir cliente:", error);
                 setMensagem('❌ Erro ao excluir cliente.');
-                setTimeout(() => setMensagem(''), 3000); 
+                setTimeout(() => setMensagem(''), 3000); // Limpa a mensagem após 3 segundos
             });
     };
 
@@ -41,15 +41,15 @@ function ClientesList() {
             <td>{props.cliente.telefone}</td>
             <td>{new Date(props.cliente.dataCadastro).toLocaleDateString('pt-BR')}</td>
             
-            
+            {}
             <td className="text-center">
                 
                 {/* Botões */}
                 <Link to={"/edit/"+props.cliente._id} className="btn btn-outline-dark btn-sm me-2">Editar</Link>
                 <button className="btn btn-danger btn-sm" onClick={() => { deleteCliente(props.cliente._id) }}>Excluir</button>
             
-            </td> {/* 🚨 CORREÇÃO: Fechamento da tag </td> */}
-        </tr> // 🚨 CORREÇÃO: Fechamento da tag </tr>
+            </td> {}
+        </tr> 
     );
 
     const clientesList = () => {
@@ -63,7 +63,7 @@ function ClientesList() {
                     Lista de Clientes ({clientes.length} Cadastrados)
                 </h4>
 
-                
+                {}
                 {mensagem && (
                     <div className={`alert ${mensagem.startsWith('✅') ? 'alert-success' : 'alert-danger'} mt-3`} role="alert">
                         {mensagem}
