@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+// Ocultamos a imagem de fundo para uma aparência mais limpa em produção, 
+// mas você pode reativá-la ou usar uma imagem mais sutil.
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -20,59 +21,60 @@ function CreateCliente() {
 
         setMensagem('');
 
-        
         axios.post(API_URL + '/clientes/add', cliente)
             .then(res => {
-
-                setMensagem('✅ Cliente Adicionado com Sucesso!');
-                setNome('');
-                setTelefone('');
-
+                setMensagem('✅ Cliente adicionado com sucesso!');
+                setNome(''); // Limpa o campo nome
+                setTelefone(''); // Limpa o campo telefone
             })
             .catch(err => {
-
                 console.error('Erro ao cadastrar: ', err);
-               
-                setMensagem('❌ Erro ao cadastrar cliente. Verifique o console. Detalhe: ' + (err.response?.data?.message || err.message));
+                setMensagem('❌ Erro ao cadastrar cliente: ' + (err.response?.data?.message || err.message));
             });
     };
 
     return (
-        <div style={{ marginTop: 20 }}>
-            <h3>Cadastrar Novo Cliente</h3>
-            {/* Exibição da imagem que mostra o erro de cadastro no Front-end */}
-            
-            <form onSubmit={onSubmit}>
+        <div className="container mt-4">
+            {/* 🚨 NOVIDADE: Envolvemos o formulário em um Card para um visual mais profissional */}
+            <div className="card shadow-sm p-4">
+                <h4 className="text-secondary mb-4">Cadastrar Novo Cliente</h4>
+                
+                <form onSubmit={onSubmit}>
+                    <div className="form-group mb-3">
+                        <label className="form-label">Nome:</label>
+                        <input type="text"
+                            required
+                            className="form-control"
+                            value={nome}
+                            onChange={(e) => setNome(e.target.value)}
+                            placeholder="Digite o nome do cliente" // Adicionado placeholder
+                        />
+                    </div>
 
-                {/* Campo Nome */}
-                <div className="form-group mb-3">
-                    <label>Nome: </label>
-                    <input type="text"
-                        required
-                        className="form-control"
-                        value={nome}
-                        onChange={(e) => setNome(e.target.value)}
-                    />
-                </div>
+                    <div className="form-group mb-4"> {/* Aumentei a margem inferior para separar do botão */}
+                        <label className="form-label">Telefone:</label>
+                        <input type="text"
+                            required
+                            className="form-control"
+                            value={telefone}
+                            onChange={(e) => setTelefone(e.target.value)}
+                            placeholder="Ex: 71987654321" // Adicionado placeholder
+                        />
+                    </div>
 
-                {/* Campo Telefone */}
-                <div className="form-group mb-3">
-                    <label>Telefone: </label>
-                    <input type="text"
-                        required
-                        className="form-control"
-                        value={telefone}
-                        onChange={(e) => setTelefone(e.target.value)}
-                    />
-                </div>
+                    <div className="form-group">
+                        {/* 🚨 NOVIDADE: Botão com estilo btn-dark para consistência com o tema */}
+                        <input type="submit" value="Cadastrar Cliente" className="btn btn-dark" />
+                    </div>
 
-                <div className="form-group mb-3">
-                    <input type="submit" value="Cadastrar Cliente" className="btn btn-primary" />
-                </div>
-
-                {/* Exibe a mensagem de sucesso ou erro */}
-                {mensagem && <div className={`alert ${mensagem.startsWith('✅') ? 'alert-success' : 'alert-danger'} mt-3`}>{mensagem}</div>}
-            </form>
+                    {/* Mensagem de feedback */}
+                    {mensagem && (
+                        <div className={`alert ${mensagem.startsWith('✅') ? 'alert-success' : 'alert-danger'} mt-3`} role="alert">
+                            {mensagem}
+                        </div>
+                    )}
+                </form>
+            </div>
         </div>
     );
 }
