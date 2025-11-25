@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// Ocultamos a imagem de fundo para uma aparência mais limpa em produção, 
-// mas você pode reativá-la ou usar uma imagem mais sutil.
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -24,8 +22,8 @@ function CreateCliente() {
         axios.post(API_URL + '/clientes/add', cliente)
             .then(res => {
                 setMensagem('✅ Cliente adicionado com sucesso!');
-                setNome(''); // Limpa o campo nome
-                setTelefone(''); // Limpa o campo telefone
+                setNome('');
+                setTelefone(''); 
             })
             .catch(err => {
                 console.error('Erro ao cadastrar: ', err);
@@ -35,7 +33,7 @@ function CreateCliente() {
 
     return (
         <div className="container mt-4">
-            {/* 🚨 NOVIDADE: Envolvemos o formulário em um Card para um visual mais profissional */}
+           
             <div className="card shadow-sm p-4">
                 <h4 className="text-secondary mb-4">Cadastrar Novo Cliente</h4>
                 
@@ -51,7 +49,7 @@ function CreateCliente() {
                         />
                     </div>
 
-                    <div className="form-group mb-4"> {/* Aumentei a margem inferior para separar do botão */}
+                    <div className="form-group mb-4"> 
                         <label className="form-label">Telefone:</label>
                         <input type="text"
                             required
@@ -63,11 +61,11 @@ function CreateCliente() {
                     </div>
 
                     <div className="form-group">
-                        {/* 🚨 NOVIDADE: Botão com estilo btn-dark para consistência com o tema */}
+                        
                         <input type="submit" value="Cadastrar Cliente" className="btn btn-dark" />
                     </div>
 
-                    {/* Mensagem de feedback */}
+                   
                     {mensagem && (
                         <div className={`alert ${mensagem.startsWith('✅') ? 'alert-success' : 'alert-danger'} mt-3`} role="alert">
                             {mensagem}
