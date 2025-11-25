@@ -1,80 +1,96 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-function CreateCliente() {
+function ClientesList() {
+    const [clientes, setClientes] = useState([]);
+    const [mensagem, setMensagem] = useState(''); 
 
-    const [nome, setNome] = useState('');
-    const [telefone, setTelefone] = useState('');
-    const [mensagem, setMensagem] = useState('');
-
-    const onSubmit = (e) => {
-        e.preventDefault();
-
-        const cliente = {
-            nome: nome,
-            telefone: telefone,
-        };
-
-        setMensagem('');
-
-        axios.post(API_URL + '/clientes/add', cliente)
-            .then(res => {
-                setMensagem('✅ Cliente adicionado com sucesso!');
-                setNome('');
-                setTelefone(''); 
+    useEffect(() => {
+        axios.get(API_URL + '/clientes')
+            .then(response => {
+                setClientes(response.data);
             })
-            .catch(err => {
-                console.error('Erro ao cadastrar: ', err);
-                setMensagem('❌ Erro ao cadastrar cliente: ' + (err.response?.data?.message || err.message));
+            .catch((error) => {
+                console.error("Erro ao carregar clientes:", error);
+                setMensagem('❌ Erro ao carregar a lista de clientes.');
+            })
+    }, []);
+
+    const deleteCliente = (id) => {
+        axios.delete(API_URL + '/clientes/' + id)
+            .then(response => {
+                console.log("Cliente excluído:", response.data);
+                setClientes(clientes.filter(el => el._id !== id));
+                setMensagem('✅ Cliente excluído com sucesso!');
+                setTimeout(() => setMensagem(''), 3000); // Limpa a mensagem após 3 segundos
+            })
+            .catch((error) => {
+                console.error("Erro ao excluir cliente:", error);
+                setMensagem('❌ Erro ao excluir cliente.');
+                setTimeout(() => setMensagem(''), 3000); // Limpa a mensagem após 3 segundos
             });
+    };
+
+    const Cliente = props => (
+        <tr>
+            <td className="text-center">{props.index + 1}</td>
+            <td>{props.cliente.nome}</td>
+            <td>{props.cliente.telefone}</td>
+            <td>{new Date(props.cliente.dataCadastro).toLocaleDateString('pt-BR')}</td>
+            
+            {}
+            <td className="text-center">
+                
+                {/* Botões */}
+                <Link to={"/edit/"+props.cliente._id} className="btn btn-outline-dark btn-sm me-2">Editar</Link>
+                <button className="btn btn-danger btn-sm" onClick={() => { deleteCliente(props.cliente._id) }}>Excluir</button>
+            
+            </td> {}
+        </tr> 
+    );
+
+    const clientesList = () => {
+        return clientes.map((c, index) => <Cliente cliente={c} key={c._id} index={index} />);
     };
 
     return (
         <div className="container mt-4">
-           
             <div className="card shadow-sm p-4">
-                <h4 className="text-secondary mb-4">Cadastrar Novo Cliente</h4>
+                <h4 className="text-secondary mb-4">
+                    Lista de Clientes ({clientes.length} Cadastrados)
+                </h4>
+
                 
-                <form onSubmit={onSubmit}>
-                    <div className="form-group mb-3">
-                        <label className="form-label">Nome:</label>
-                        <input type="text"
-                            required
-                            className="form-control"
-                            value={nome}
-                            onChange={(e) => setNome(e.target.value)}
-                            placeholder="Digite o nome do cliente" // Adicionado placeholder
-                        />
+                {mensagem && (
+                    <div className={`alert ${mensagem.startsWith('✅') ? 'alert-success' : 'alert-danger'} mt-3`} role="alert">
+                        {mensagem}
                     </div>
-
-                    <div className="form-group mb-4"> 
-                        <label className="form-label">Telefone:</label>
-                        <input type="text"
-                            required
-                            className="form-control"
-                            value={telefone}
-                            onChange={(e) => setTelefone(e.target.value)}
-                            placeholder="Ex: 71987654321" // Adicionado placeholder
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        
-                        <input type="submit" value="Cadastrar Cliente" className="btn btn-dark" />
-                    </div>
-
-                   
-                    {mensagem && (
-                        <div className={`alert ${mensagem.startsWith('✅') ? 'alert-success' : 'alert-danger'} mt-3`} role="alert">
-                            {mensagem}
-                        </div>
-                    )}
-                </form>
+                )}
+                
+                {clientes.length > 0 ? (
+                    <table className="table table-striped table-hover mt-3">
+                        <thead className="thead-light">
+                            <tr>
+                                <th className="text-muted fw-normal text-center">#</th>
+                                <th className="text-muted fw-normal">Nome</th>
+                                <th className="text-muted fw-normal">Telefone</th>
+                                <th className="text-muted fw-normal">Cadastro</th>
+                                <th className="text-muted fw-normal text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            { clientesList() }
+                        </tbody>
+                    </table>
+                ) : (
+                    <p className="text-muted text-center mt-4">Nenhum cliente cadastrado ainda. <Link to="/create">Cadastre um novo cliente.</Link></p>
+                )}
             </div>
         </div>
     );
 }
 
-export default CreateCliente;
+export default ClientesList;
